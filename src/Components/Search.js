@@ -19,7 +19,7 @@ export default class Search extends React.Component {
     this.setState({search:event.target.value})
   }
   
-  handleSearch(event) {
+  handleSearch() {
     let query =  this.state.search;
     client.search("gifs", {"q": query})
       .then((response) => {

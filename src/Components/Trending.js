@@ -1,4 +1,6 @@
 import React from 'react';
+import GIF from './GIF.js';
+
 let giphy = require('./../../key.js')
 let GphApiClient = require('giphy-js-sdk-core')
 let client = GphApiClient(giphy.key)
@@ -16,8 +18,7 @@ export default class Trending extends React.Component {
       limit:5,
     })
       .then((response) => {
-        console.log('RESPONSE',response.data)
-        let gifs = response.data
+        let gifs = response.data;
         this.setState({
           trendingGIFs: gifs
         })
@@ -29,10 +30,10 @@ export default class Trending extends React.Component {
 
   render() {
     return (
-      (this.state.trendingGIFs)?   
+      (this.state.trendingGIFs.length > 0)?   
         <div className='trending-component'>
-          Im Trending... 
-            the current GIF state {this.state.trendingGIFs.length}  
+          What's Trending
+          <GIF data={this.state.trendingGIFs}/>  
         </div> 
         :
         <div>Hold on GIFs coming!</div>
