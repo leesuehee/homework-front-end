@@ -1,5 +1,53 @@
 body {
-  margin: 0;
-  padding: 0;
+  margin     : 0;
+  padding    : 0;
   font-family: sans-serif;
+}
+
+.trending-component, .search-results, .GIF-container {
+  width    : 100%;
+}
+.search-results {
+  background-color: black;
+  margin : 0 auto;
+  top    : 300px;
+}
+.trending-component {
+  margin: 0 auto;
+  top   : 25%;
+}
+.GIF-container {
+  background-color: black;
+  top    : 10px;
+  bottom : 50px;
+  margin : 0 auto;
+}
+.GIF-wrapper {
+  height  : auto;
+  float   : left;
+  padding : 5px;
+  position: relative;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  width: auto\9; 
+}
+
+.GIF-wrapper .details {
+  visibility: hidden;
+  position  : absolute;
+  color     : white;
+  bottom    : 0px;
+  left      : 0px;
+  overflow-x: wrap;
+}
+
+.GIF-wrapper:hover .details {
+  visibility: visible;
+  z-index   : 101;
+}
+
+.GIF-wrapper:hover .image{
+  filter :brightness(75%)
 }
