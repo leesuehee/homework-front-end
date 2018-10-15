@@ -1,4 +1,7 @@
 import React from 'react';
+let giphy = require('./../../key.js')
+let GphApiClient = require('giphy-js-sdk-core')
+let client = GphApiClient(giphy.key)
 
 export default class Trending extends React.Component {
   constructor(props) {
@@ -9,19 +12,30 @@ export default class Trending extends React.Component {
   };
 
   componentDidMount() {
-    // ping trending end point here 
-    // upon successful ping update the trendingGIF state 
-    // render with the trending GIFs
-  }
+    client.trending("gifs", {
+      limit:5,
+    })
+      .then((response) => {
+        console.log('RESPONSE',response.data)
+        let gifs = response.data
+        this.setState({
+          trendingGIFs: gifs
+        })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    }
 
   render() {
     return (
-      <div className='trending-component'>
-        Im Trending... 
-        <p>
-          the current GIF state 
-        </p>   
-      </div>
+      (this.state.trendingGIFs)?   
+        <div className='trending-component'>
+          Im Trending... 
+            the current GIF state {this.state.trendingGIFs.length}  
+        </div> 
+        :
+        <div>Hold on GIFs coming!</div>
     )
   }
 }
