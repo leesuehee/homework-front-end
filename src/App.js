@@ -15,15 +15,15 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      trend   : true,
-      search  : false,
-      carousel: false,
       trendingGIFs:[],
-      query   : '',
-      results : [],
-      myGIFs  : [],
-      total: 0,
-      current: 0,
+      expand   : false,
+      size     : '10vh',
+      carousel : false,
+      query    : '',
+      results  : [],
+      myGIFs   : [],
+      total    : 0,
+      current  : 0,
     }
   }
 
@@ -31,17 +31,16 @@ class App extends React.Component {
     client.trending("gifs", {
       limit:10,
     })
-      .then((response) => {
-        let gifs = response.data;
-        this.setState({trendingGIFs: gifs});
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    .then((response) => {
+      let gifs = response.data;
+      this.setState({trendingGIFs: gifs});
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   }
 
   toggleCarousel() {
-    console.log(!this.state.carousel)
     this.setState({carousel: !this.state.carousel})
   }
   onRightClick () {
@@ -62,28 +61,35 @@ class App extends React.Component {
     }
   }
 
-  toggleView(e) {
-    console.log('toggling');
-    if (e.target.name !== this.state.trend) {
-      let bool = !this.state.trend;
-      this.setState({trend: bool})
-    } 
-  }
-
   handleChange(event) {
     this.setState({query:event.target.value})
   }
-  
+
   handleSearch() {
-    client.search("gifs", {"q": query})
+    client.search("gifs", {"q": this.state.query})
       .then((response) => {
-        let searchResults = response.data;
-        console.log(searchResults.length)
+        let searchResults = response.data.slice(0,10);
         this.setState({
           results : searchResults,
+          expand  : true,
+          size    : '75vh',
         })
       })
       .catch((err) => {console.log(err)})
+  }
+
+  toggleMinimize() {
+    this.setState({
+      expand: false,
+      size  : '10vh', 
+    })
+  }
+
+  toggleMaximize() {
+    this.setState({
+      expand: true,
+      size  : '75vh',
+    })
   }
 
   render() {
@@ -95,11 +101,9 @@ class App extends React.Component {
             <h2>eazy GIPHY</h2>
           </div>
           <Search handleChange={this.handleChange.bind(this)} 
-            handleSearch={this.handleSearch.bind(this)}
             query={this.state.query}
             results={this.state.results}/>        
           <Trending trendingGIFS={this.state.trendingGIFs} 
-            toggle={this.toggleView.bind(this)}
             carousel={this.toggleCarousel.bind(this)}/>
           <Carousel trendingGIFs={this.state.trendingGIFs}
             left={this.onLeftClick.bind(this)}
@@ -107,37 +111,28 @@ class App extends React.Component {
             toggleCarousel={this.toggleCarousel.bind(this)}/>
         </div>
       )
-  } else if (this.state.trend) {
+    } else {
       return (
         <div className="App">
           <div className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
             <h2>eazy GIPHY</h2>
           </div>
-          <Search handleChange={this.handleChange.bind(this)} 
+          <input className='search-input' value={this.state.query} onChange={this.handleChange.bind(this)}></input>
+          <button className='search-button' onClick={this.handleSearch.bind(this)}> search </button>
+          <Search  
             handleSearch={this.handleSearch.bind(this)}
+            toggleMinimize={this.toggleMinimize.bind(this)}
+            toggleMaximize={this.toggleMaximize.bind(this)}
             query={this.state.query}
-            results={this.state.results}/>        
+            results={this.state.results}
+            size={this.state.size}
+            expand={this.state.expand}/>        
           <Trending trendingGIFS={this.state.trendingGIFs} 
-            toggle={this.toggleView.bind(this)}
             carousel={this.toggleCarousel.bind(this)}/>
         </div>
       );
-    } else {
-      return (
-        <div className="App">
-          <div className="App-header">
-              <img src={logo} className="App-logo" alt="logo" />
-              <h2>eazy GIPHY</h2>
-            </div>
-            <Search handleChange={this.handleChange.bind(this)} 
-              handleSearch={this.handleSearch.bind(this)}
-              query={this.state.query}
-              results={this.state.results}/>        
-            <Trending trendingGIFS={this.state.trendingGIFs}/>
-        </div>
-      )
-    }
+    } 
   }
 }
 
