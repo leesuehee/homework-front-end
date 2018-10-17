@@ -1,9 +1,11 @@
 import React from 'react';
 
 let Carousel = (props) => {
-  let slideData = [{total:0}, {data:[]}]
-  let id = 1
-  props.trendingGIFs.map(gif => {
+  let slideData = [{total:0}, {data:[]}];
+  let id = 1;
+  let responseGIFs = (props.view==='trendingGIFs')?props.trendingGIFs:props.results;
+
+  responseGIFs.map(gif => {
     let gifData = {}
     slideData[0].total += parseInt(gif.images.original.width);
     gifData.size =`${parseInt(gif.images.original.width)}px`;
@@ -16,10 +18,12 @@ let Carousel = (props) => {
   })
 
   let slideWidth = slideData[0].total + 'px';
+  let boxWidth = `${props.queue[props.cur]}px`
+  let rightPos = `${(props.queue[props.cur]-35)}px`
 
   return (
     <div className='Carousel' >  
-      <div className='slidebinder'>
+      <div className='slidebinder' style={{width:boxWidth}}>
         <div className='sliderbox' style={{width:slideWidth} }>
           <div className='left' onClick={props.left}>
             <img src='http://www.thorlux.co.uk/shared/media/arrow-left-white.png'
@@ -35,7 +39,7 @@ let Carousel = (props) => {
           </div>
         </div>
         )}
-          <div className='right' onClick={props.right}>
+          <div className='right' onClick={props.right} style={{'left':rightPos}}>
               <img src='http://www.thorlux.com/shared/media/arrow-right-white.png'
               width='30px' height='35px' />
           </div>
