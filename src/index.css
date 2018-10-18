@@ -4,50 +4,100 @@ body {
   font-family: sans-serif;
 }
 
-.trending-component, .search-results, .GIF-container {
-  width    : 100%;
-}
-.search-results {
-  background-color: black;
+.trending-component, .search-component {
+  background-color:rgba(48,107,111,.4);
+  border-radius: 20px;
+  overflow: scroll;;
+  width  : 75vw;
+  height : 75vh;
+  padding: 10px;
   margin : 0 auto;
-  top    : 300px;
 }
-.trending-component {
-  margin: 0 auto;
-  top   : 25%;
+.trending-component{
+  position:relative;
 }
+.trend-title{
+  font-size:30px;
+}
+
+.search-component {
+  background-color:#7CC2D6;
+  position: relative;
+  height: 3vh;
+}
+
+.search-input {
+  height:3vh;
+  width :60vh;
+}
+.search-button {
+  height:3vh;
+  width :10vh;
+}
+
+.minimize, .maximize{
+  border-radius: 5px;
+  text-align: center;
+  font-size :20px;
+  padding   : 3px;
+  width     : 75vh;
+  margin    : 0 auto;
+}
+
 .GIF-container {
-  background-color: black;
-  top    : 10px;
-  bottom : 50px;
   margin : 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .GIF-wrapper {
-  height  : auto;
-  float   : left;
   padding : 5px;
-  position: relative;
 }
-img {
-  max-width: 100%;
-  height: auto;
-  width: auto\9; 
-}
-
-.GIF-wrapper .details {
-  visibility: hidden;
-  position  : absolute;
-  color     : white;
-  bottom    : 0px;
-  left      : 0px;
-  overflow-x: wrap;
-}
-
-.GIF-wrapper:hover .details {
-  visibility: visible;
-  z-index   : 101;
-}
-
 .GIF-wrapper:hover .image{
   filter :brightness(75%)
 }
+
+.sliderbox{
+  position:relative;
+}
+.slidebinder{
+  background-color:rgba(0,0,0,.9); 
+  box-shadow: 0 0 0 100vmax rgba(0,0,0,.9);
+  position: fixed; 
+  left:40vw;
+  top:20vh;
+}
+.slide {
+  float:left;
+}
+.text {
+  visibility: hidden;
+  position: absolute;
+  color: white;
+  display: flex;
+  margin-bottom: -30px;
+  justify-content: center;
+  font-size: 20px;
+  padding: 2px;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  z-index : 102;
+}
+
+.slide:hover .text {
+  visibility: visible;
+}
+
+.left, .right {
+  width: 50px;
+  height: 35px;
+  background-color:rgba(0,0,0,.4);
+  text-align: center;
+  padding: 20px 0px;
+  position: absolute;
+  top: 0px;
+  z-index: 101; 
+}
+
+.left:hover, .right:hover {
+  background-color:#7CC2D6;
+} 
