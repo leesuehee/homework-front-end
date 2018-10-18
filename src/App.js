@@ -37,6 +37,7 @@ class App extends React.Component {
       limit:10,
     })
     .then((response) => {
+      console.log('CLIENT',response)
       let gifs = response.data;
       this.setState({trendingGIFs: gifs});
     })
@@ -46,17 +47,8 @@ class App extends React.Component {
 
   }
 
-  setSlide(data,id) {
-    let setSlide = this.state.slides[1].details.slice(0,id).reduce((width,item)=>{
-      return width += item
-    },0)
-    $(".sliderbox").animate({left:`-=400`},200);
-    $(".right").animate({left:`+=${setSlide}`},200);
-    $(".left").animate({left:`+=${setSlide}`},200);    
-  }
-
   toggleCarousel(data,id,view) {
-    console.log('data', data)
+    console.log(data)
     this.setState({
       carousel: !this.state.carousel,
       current : 0,
@@ -65,6 +57,10 @@ class App extends React.Component {
       total   : data[0].total
     })
   }
+  handleClose () {
+      this.setState({carousel: false,})
+  }
+
   onRightClick () {
     let move = this.state.slides[1].details[this.state.current].width;
     let right = this.state.slides[1].details[this.state.current+1].width;
@@ -89,10 +85,11 @@ class App extends React.Component {
   handleChange(event) {
     this.setState({query:event.target.value})
   }
+
   handleSearch() {
-    client.search("gifs", {"q": this.state.query})
+    client.search("gifs", {"q": this.state.query, limit:10})
       .then((response) => {
-        let searchResults = response.data.slice(0,10);
+        let searchResults = response.data;
         this.setState({
           results : searchResults,
           expand  : true,
@@ -104,7 +101,7 @@ class App extends React.Component {
   toggleMinimize() {
     this.setState({
       expand: false,
-      size  : '7vh', 
+      size  : '3vh', 
     })
   }
   toggleMaximize() {
@@ -122,8 +119,13 @@ class App extends React.Component {
             <img src={logo} className="App-logo" alt="logo" />
             <h2>eazy GIPHY</h2>
           </div>
-          <Search results={this.state.results}/>        
+          <Search 
+            query={this.state.query}
+            results={this.state.results}
+            close={this.handleClose.bind(this)}
+          />    
           <Trending trendingGIFs={this.state.trendingGIFs} 
+            close={this.handleClose.bind(this)}
             toggleCarousel={this.toggleCarousel.bind(this)}/>
           <Carousel 
             slides={this.state.slides}
@@ -132,6 +134,7 @@ class App extends React.Component {
             left={this.onLeftClick.bind(this)}
             right={this.onRightClick.bind(this)}
             toggleCarousel={this.toggleCarousel.bind(this)}/>
+          
         </div>
       )
     } else {
@@ -145,6 +148,7 @@ class App extends React.Component {
           <button className='search-button' onClick={this.handleSearch.bind(this)}> search </button>
           <Search  
             handleSearch={this.handleSearch.bind(this)}
+            handleChange={this.handleChange.bind(this)}
             toggleMinimize={this.toggleMinimize.bind(this)}
             toggleMaximize={this.toggleMaximize.bind(this)}
             query={this.state.query}

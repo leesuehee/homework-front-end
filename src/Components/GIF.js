@@ -11,12 +11,13 @@ let GIF = function(props) {
     gifData.img = gif.images.fixed_height.gif_url;
     gifData.IMG = gif.images.original.gif_url;
     gifData.key = id;
-    gifData.width = `${gif.images.original.width}px`
-    formatedGIFs[2].binderWidth += parseInt(gif.images.original.width)
+    gifData.width = `${gif.images.original.width}px`;
+    gifData.height = `${gif.images.original.height}px`;
+    formatedGIFs[2].binderWidth += parseInt(gif.images.original.width);
     id++;
 
-    gifData.text = gif.title
-    formatedGIFs[1].details.push(gifData)
+    gifData.text = gif.title;
+    formatedGIFs[1].details.push(gifData);
   })
 
   return (
