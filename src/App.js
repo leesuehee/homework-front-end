@@ -22,10 +22,10 @@ class App extends React.Component {
       query    : '',
       results  : [],
       myGIFs   : [],
-      gifQueue : [],
       total    : 0,
       current  : 0,
-      view     : 'trendingGIFs'
+      view     : 'trendingGIFs',
+      slides   : [],
     }
   }
 
@@ -46,27 +46,28 @@ class App extends React.Component {
 
   }
 
-  toggleCarousel(data,id,view) {
-    let setSlide = data[2].carousel.slice(0,id).reduce((width,item)=>{
+  setSlide(data,id) {
+    let setSlide = this.state.slides[1].details.slice(0,id).reduce((width,item)=>{
       return width += item
     },0)
-    
-    this.setState({
-      gifQueue: data[2].carousel,
-      carousel: !this.state.carousel,
-      current : id,
-      total   : data[0].total,
-      view    : view,
-    })
-
-    $(".sliderbox").animate({left:`-=${setSlide}`},200);
+    $(".sliderbox").animate({left:`-=400`},200);
     $(".right").animate({left:`+=${setSlide}`},200);
     $(".left").animate({left:`+=${setSlide}`},200);    
+  }
 
+  toggleCarousel(data,id,view) {
+    console.log('data', data)
+    this.setState({
+      carousel: !this.state.carousel,
+      current : 0,
+      slides  : data,
+      view    : view,
+      total   : data[0].total
+    })
   }
   onRightClick () {
-    let move = this.state.gifQueue[this.state.current]
-    let right = this.state.gifQueue[this.state.current+1]
+    let move = this.state.slides[1].details[this.state.current].width;
+    let right = this.state.slides[1].details[this.state.current+1].width;
     if(this.state.current < this.state.total) {
       this.state.current++;
       $(".sliderbox").animate({left:`-=${move}`},200);
@@ -74,10 +75,9 @@ class App extends React.Component {
       $(".left").animate({left:`+=${move}`},200);
     }
   };
-
   onLeftClick() {
-    let move = this.state.gifQueue[this.state.current-1]
-    let right = this.state.gifQueue[this.state.current]
+    let move = this.state.slides[1].details[this.state.current-1].width
+    let right = this.state.slides[1].details[this.state.current].width
     if(this.state.current > 0) {
       this.state.current--;
       $(".sliderbox").animate({left:`+=${move}`},200);
@@ -89,7 +89,6 @@ class App extends React.Component {
   handleChange(event) {
     this.setState({query:event.target.value})
   }
-
   handleSearch() {
     client.search("gifs", {"q": this.state.query})
       .then((response) => {
@@ -102,7 +101,6 @@ class App extends React.Component {
       })
       .catch((err) => {console.log(err)})
   }
-
   toggleMinimize() {
     this.setState({
       expand: false,
@@ -128,10 +126,8 @@ class App extends React.Component {
           <Trending trendingGIFs={this.state.trendingGIFs} 
             toggleCarousel={this.toggleCarousel.bind(this)}/>
           <Carousel 
+            slides={this.state.slides}
             view={this.state.view}
-            results={this.state.results}
-            trendingGIFs={this.state.trendingGIFs}
-            queue={this.state.gifQueue}
             cur={this.state.current}
             left={this.onLeftClick.bind(this)}
             right={this.onRightClick.bind(this)}

@@ -1,40 +1,25 @@
 import React from 'react';
 
 let Carousel = (props) => {
-  let slideData = [{total:0}, {data:[]}];
-  let id = 1;
-  let responseGIFs = (props.view==='trendingGIFs')?props.trendingGIFs:props.results;
-
-  responseGIFs.map(gif => {
-    let gifData = {}
-    slideData[0].total += parseInt(gif.images.original.width);
-    gifData.size =`${parseInt(gif.images.original.width)}px`;
-    gifData.img = gif.images.original.gif_url;
-    gifData.id = id;
-    id++;
-
-    if (gif.title) gifData.text = gif.title;
-    slideData[1].data.push(gifData)
-  })
-
-  let slideWidth = slideData[0].total + 'px';
-  let boxWidth = `${props.queue[props.cur]}px`
-  let rightPos = `${(props.queue[props.cur]-35)}px`
+    let allSlides = props.slides[1].details;
+    let slideWidth = props.slides[1].details[props.cur].width + 'px';
+    let boxWidth = props.slides[2].binderWidth + 'px';
+    let rightPos = parseInt(props.slides[1].details[props.cur].width)-35 + 'px';
 
   return (
     <div className='Carousel' >  
-      <div className='slidebinder' style={{width:boxWidth}}>
-        <div className='sliderbox' style={{width:slideWidth} }>
+      <div className='slidebinder' style={{width:slideWidth,height:'auto'}}>
+        <div className='sliderbox' style={{width:boxWidth}}>
           <div className='left' onClick={props.left}>
             <img src='http://www.thorlux.co.uk/shared/media/arrow-left-white.png'
               width='30px' height ='35px'/>
           </div>
-        {slideData[1].data.map(gif => 
-        <div className='slide' key={gif.id}>
-          <div className='carousel-GIF-container' 
-            style={{width:gif.size, height:'auto'}}>
+        {allSlides.map(gif => 
+        <div className='slide' key={gif.key} 
+            style={{width:gif.width, height:'auto'}}>
+          <div className='carousel-GIF-container' >
           <img className='carousel-GIF-wrapper' 
-            src={gif.img} 
+            src={gif.IMG} 
             onClick={props.toggleCarousel}/>
           </div>
         </div>

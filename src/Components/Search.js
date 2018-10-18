@@ -7,7 +7,7 @@ let Search = (props) => {
       <div>
         <div className='search-component' style={{height:props.size}}>
           <div className='search-results'>
-            <GIF data={props.results}/>
+            <GIF data={props.results} toggleCarousel={props.toggleCarousel} view={'results'}/>
           </div>
         </div>      
         {props.expand ? 
